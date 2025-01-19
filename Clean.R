@@ -1,13 +1,13 @@
-#import and view data set
-
+# Import Required Libraries
 library(readr)
+library(dplyr)
+
+# Import and View the Dataset
 diabetes <- read_csv("diabetes.csv")
 View(diabetes)
 
-library(dplyr)
-
-# Clean dataset and  Removes duplicate rows if any
-
+# Data Cleaning
+## Remove rows with zero values in key variables
 diabetes_cleaned <- diabetes %>%
   filter(
     Glucose != 0,
@@ -16,48 +16,34 @@ diabetes_cleaned <- diabetes %>%
     Insulin != 0,
     BMI != 0,
     DiabetesPedigreeFunction != 0,
-    Age != 0
-  ) %>%
-  distinct()
+    Age != 0) %>%
+  distinct()  
 
-# Check for remaining duplicates
-
+# Remove duplicate rows
+## Check for Remaining Duplicates
 any_duplicates <- diabetes_cleaned %>%
   distinct() %>%
   nrow() != nrow(diabetes_cleaned)
+print(any_duplicates)
 
-print(any_duplicates) 
-
-#check data type and clean
-
-str(diabetes_cleaned)
-
-# Fix Age as integer
-diabetes_cleaned <- diabetes_cleaned %>%
-  mutate(Age = as.integer(Age))
-
-
-# Verify changes
-str(diabetes_cleaned)
-
-# Rename variables to include spaces
+# Rename Variables
 diabetes_cleaned <- diabetes_cleaned %>%
   rename(
     "Blood Pressure" = BloodPressure,
     "Skin Thickness" = SkinThickness,
-    "Diabetes Pedigree Function" = DiabetesPedigreeFunction
-  )
+    "Diabetes Pedigree Function" = DiabetesPedigreeFunction)
 
-# View the updated column names
+## View the Updated Column Names
 names(diabetes_cleaned)
 
-# Randomly select 10 observations from the cleaned dataset
-set.seed(123)  # Set a seed for reproducibility
+# Random Sampling
+## Randomly Select 10 Observations from the Cleaned Dataset
+set.seed(123)
 sampled_data <- diabetes_cleaned %>%
   sample_n(10)
 
-# Save the sampled data as a new dataset
+## Save the Sampled Data as a New CSV File
 write.csv(sampled_data, "cleaned_sampled_data.csv", row.names = FALSE)
 
-# Display the sampled data
+## Display the Sampled Data
 sampled_data
