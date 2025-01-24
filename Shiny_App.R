@@ -21,7 +21,30 @@ model <- glm(Outcome ~ Pregnancies + Glucose + Blood_Pressure + Skin_Thickness +
 
 # Define UI
 ui <- fluidPage(
-  titlePanel("Diabetes Risk Prediction"),
+  
+  # Set background color
+  tags$style(HTML("
+    body {
+      background-color: #ADD8E6;
+    }
+  ")),
+  
+  # Header with logo, title, and developer details
+  titlePanel(
+    div(
+      h1("Diabetes Risk Prediction", style = "color: #00008B;")
+    )
+  ),
+  
+  fluidRow(
+    column(12,
+           h4("Developer: Shemelis Aragaw Yesuf"),
+           h5("Submitted for: Prof. Dominik Böhler"),
+           h5("Deggendorf Institute of Technology"),
+           h5("GPH Masters - Digital Health Course")
+    )
+  ),
+  hr(),
   
   sidebarLayout(
     sidebarPanel(
