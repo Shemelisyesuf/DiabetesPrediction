@@ -1,15 +1,3 @@
-# Install required packages
-install.packages("shiny")
-install.packages("dplyr")
-install.packages("ggplot2")
-install.packages("caret")
-
-# Load libraries
-library(shiny)
-library(dplyr)
-library(caret)
-library(readr)
-
 # Load the diabetes dataset
 library(readr)
 Final_clean <- read_csv("diabetes_clean.csv")
