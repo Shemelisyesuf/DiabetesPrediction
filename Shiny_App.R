@@ -1,5 +1,7 @@
 # Load the diabetes dataset
+library(shiny)
 library(readr)
+
 Final_clean <- read_csv("diabetes_clean.csv")
 
 # Train a simple logistic regression model
@@ -11,18 +13,10 @@ model <- glm(Outcome ~ Pregnancies + Glucose + Blood_Pressure + Skin_Thickness +
 ui <- fluidPage(
   
   # Set background color
-  tags$style(HTML("
-    body {
-      background-color: #ADD8E6;
-    }
-  ")),
+  tags$style(HTML("body { background-color: #ADD8E6; }")),
   
-  # Header with logo, title, and developer details
-  titlePanel(
-    div(
-      h1("Diabetes Risk Prediction", style = "color: #00008B;")
-    )
-  ),
+  # Header
+  titlePanel(div(h1("Diabetes Risk Prediction", style = "color: #00008B;"))),
   
   fluidRow(
     column(12,
@@ -51,7 +45,9 @@ ui <- fluidPage(
     mainPanel(
       h3("Diabetes Risk Prediction"),
       verbatimTextOutput("risk_output"),
-      plotOutput("risk_plot")
+      plotOutput("risk_plot"),
+      h4("Recommendation:"),
+      verbatimTextOutput("recommendation")  # Added missing output
     )
   )
 )
@@ -75,19 +71,59 @@ server <- function(input, output) {
     return(prob * 100)  # Convert probability to percentage
   })
   
+  # Assign risk category based on probability
+  risk_category <- reactive({
+    risk <- diabetes_risk()
+    if (risk < 30) {
+      return("Low Risk")
+    } else if (risk >= 30 & risk < 60) {
+      return("Moderate Risk")
+    } else if (risk >= 60 & risk < 85) {
+      return("High Risk")
+    } else {
+      return("Very High Risk")
+    }
+  })
+  
+  # Assign color based on risk category
+  risk_color <- reactive({
+    if (diabetes_risk() < 30) {
+      return("green")
+    } else if (diabetes_risk() >= 30 & diabetes_risk() < 60) {
+      return("yellow")
+    } else if (diabetes_risk() >= 60 & diabetes_risk() < 85) {
+      return("orange")
+    } else {
+      return("red")
+    }
+  })
+  
   # Display risk as a percentage
   output$risk_output <- renderText({
     risk <- diabetes_risk()
-    paste("Your estimated risk of diabetes is:", round(risk, 2), "%")
+    paste("Your estimated risk of diabetes is:", round(risk, 2), "% (", risk_category(), ")")
   })
   
-  # Plot risk based on adjusted variables
+  # Provide recommendations based on risk level
+  output$recommendation <- renderText({
+    if (diabetes_risk() < 30) {
+      return("Maintain a healthy lifestyle with balanced nutrition and regular exercise.")
+    } else if (diabetes_risk() >= 30 & diabetes_risk() < 60) {
+      return("Monitor your diet and exercise regularly. Consider consulting a healthcare provider.")
+    } else if (diabetes_risk() >= 60 & diabetes_risk() < 85) {
+      return("You are at high risk. Consult a doctor for further assessment and preventive measures.")
+    } else {
+      return("Immediate medical attention is recommended. Please consult a healthcare professional.")
+    }
+  })
+  
+  # Plot risk with dynamic colors
   output$risk_plot <- renderPlot({
     risk <- diabetes_risk()
     barplot(
       height = risk,
       names.arg = "Risk of Diabetes",
-      col = "red",
+      col = risk_color(),  # Fixed color rendering
       ylim = c(0, 100),
       main = "Predicted Risk of Diabetes",
       ylab = "Risk Percentage (%)"
@@ -97,4 +133,5 @@ server <- function(input, output) {
 
 # Run the application
 shinyApp(ui = ui, server = server)
+
 

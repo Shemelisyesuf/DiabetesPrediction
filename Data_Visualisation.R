@@ -37,21 +37,6 @@ ggpairs(diabetes_selected, aes(color = factor(Outcome), alpha = 0.5)) +
   ggtitle("Pairwise Scatter Plots") +
   theme_minimal()
 
-# -------------------- Interactive Visualizations --------------------
-
-# 3D Scatter Plot: Glucose, BMI, Age
-plot_ly(data = diabetes_clean, 
-        x = ~Glucose, y = ~BMI, z = ~Age, 
-        color = ~factor(Outcome), 
-        size = ~Blood_Pressure, 
-        type = "scatter3d", 
-        mode = "markers",
-        marker = list(opacity = 0.7)) %>%
-  layout(title = "3D Scatter Plot: Glucose vs BMI vs Age by Outcome",
-         scene = list(xaxis = list(title = "Glucose"),
-                      yaxis = list(title = "BMI"),
-                      zaxis = list(title = "Age")))
-
 # Parallel Coordinates Plot
 plot_ly(data = diabetes_clean, type = "parcoords",
         line = list(color = ~Outcome,
@@ -67,16 +52,5 @@ plot_ly(data = diabetes_clean, type = "parcoords",
           list(label = "Age", values = ~Age))) %>%
   layout(title = "Parallel Coordinates Plot: All Variables by Outcome")
 
-# Scatter Matrix for Key Variables
-plot_ly(data = diabetes_clean, type = "splom",
-        dimensions = list(
-          list(label = "Glucose", values = ~Glucose),
-          list(label = "BMI", values = ~BMI),
-          list(label = "Age", values = ~Age),
-          list(label = "Blood Pressure", values = ~Blood_Pressure)),
-        color = ~factor(Outcome),
-        marker = list(opacity = 0.7)) %>%
-  layout(title = "Scatter Matrix: Key Variables by Outcome")
 
-# -------------------- Saving Static Visualizations --------------------
-ggsave("boxplot_variables_outcome.png", height = 6, width = 12)
+
