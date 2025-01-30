@@ -1,2 +1,3 @@
 # DiabetesPrediction
-A repository featuring R scripts for diabetes prediction, including data cleaning, analysis, and a Shiny app for interactive visualization.
+Diabetes remains a global health challenge, and early detection is crucial for prevention and management. This project utilizes a dataset from the National Institute of Diabetes and Digestive and Kidney Diseases to predict diabetes risk based on various medical indicators. The dataset consists of female patients (aged 21 or older) of Pima Indian heritage and includes variables such as glucose level, BMI, insulin, and pregnancy count. The objective is to develop a predictive model and an interactive Shiny app to help healthcare providers, researchers, and general users assess diabetes risk efficiently.
+
